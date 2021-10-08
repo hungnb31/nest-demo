@@ -17,7 +17,7 @@ import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 @Controller('auth')
 // we can put the serialize interceptor here if many route in here need this
-// @Serialize(UserDto)
+@Serialize(UserDto)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -27,7 +27,6 @@ export class UsersController {
     this.usersService.create(email, password);
   }
 
-  @Serialize(UserDto)
   @Get('/:id')
   async findUser(@Param('id') id: string) {
     console.log('Handler is running...');
