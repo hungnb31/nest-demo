@@ -15,4 +15,41 @@ export class UsersService {
 
     return this.userRepo.save(user);
   }
+
+  findOne(id: number) {
+    return this.userRepo.findOne(id);
+  }
+
+  find(email: string) {
+    return this.userRepo.find({ email });
+  }
+
+  async update(id: number, attrs: Partial<Users>) {
+    // find user we need to update
+    const user = await this.findOne(id);
+
+    if (!user) {
+      throw new Error('User not found!');
+    }
+
+    // create updated user object
+    Object.assign(user, attrs);
+
+    // save updated user to db
+    return this.userRepo.save(user);
+  }
+
+  async remove(id: number) {
+    // we have two method to remove record
+    // first one is remove, this one work with entity. i.e. remove(users)
+    // second one is delete, this work with just id. i.e. delete(userId)
+
+    const user = await this.findOne(id);
+
+    if (!user) {
+      throw new Error('User not found!');
+    }
+
+    return this.userRepo.remove(user);
+  }
 }
