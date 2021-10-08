@@ -6,7 +6,6 @@ import {
   AfterUpdate,
   AfterRemove,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Users {
@@ -17,7 +16,6 @@ export class Users {
   email: string;
 
   @Column()
-  @Exclude()
   password: string;
 
   @AfterInsert()
