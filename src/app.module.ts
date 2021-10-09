@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module';
 import { Users } from './users/users.entity';
 import { ReportsModule } from './reports/reports.module';
 import { Reports } from './reports/reports.entity';
+import { AuthService } from './users/auth.service';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { Reports } from './reports/reports.entity';
     ReportsModule,
   ],
   controllers: [AppController, UsersController, ReportsController],
-  providers: [AppService, UsersService, ReportsService],
+  providers: [AppService, UsersService, ReportsService, AuthService],
 })
 export class AppModule {}
