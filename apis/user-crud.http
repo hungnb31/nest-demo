@@ -35,3 +35,9 @@ Content-Type: application/json
 {
   "email": "hung2@mail.com"
 }
+
+### Get the currently signed in user
+GET http://localhost:3000/auth/whoami
+
+### User sign out
+POST http://localhost:3000/auth/signout
