@@ -9,14 +9,25 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     // create a fake copy of user service
-
+    const users: Users[] = [];
     // we just need to fake find and create method because we only use
     // those two methods in auth service
     fakeUsersService = {
-      find: () => Promise.resolve([]),
-      create: (email: string, password: string) =>
-        Promise.resolve({ id: 1, email, password } as Users),
+      find: (email: string) => {
+        const filteredUsers = users.filter((user) => user.email === email);
+        return Promise.resolve(filteredUsers);
+      },
+      create: (email: string, password: string) => {
+        const user = {
+          id: Math.floor(Math.random() * 999999),
+          email,
+          password,
+        } as Users;
+        users.push(user);
+        return Promise.resolve(user);
+      },
     };
+
     const module = await Test.createTestingModule({
       providers: [
         AuthService,
@@ -79,17 +90,11 @@ describe('AuthService', () => {
   });
 
   it('returns a user if correct password is provided', async () => {
-    fakeUsersService.find = () =>
-      Promise.resolve([
-        {
-          email: 'abc@mail.com',
-          password:
-            '6216a2d890e4b16c.635c2b17707cf9b56abfd4b435686f38ac77e66383664cd0aebba9767926b00d',
-        } as Users,
-      ]);
+    const email = 'abc@mail.com';
+    const password = '123123';
+    await service.signup(email, password);
 
-    const user = await service.signin('abc@mail.com', '123123');
-
+    const user = await service.signin(email, password);
     expect(user).toBeDefined();
   });
 });
