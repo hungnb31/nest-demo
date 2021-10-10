@@ -56,4 +56,40 @@ describe('AuthService', () => {
       expect(error.message).toEqual('Email in use!');
     }
   });
+
+  it('throws if signin is called with not exist email', async () => {
+    try {
+      await service.signin('abc@mail.com', '123123');
+    } catch (error) {
+      expect(error).toBeDefined();
+      expect(error.message).toEqual('User not found!');
+    }
+  });
+
+  it('throws if an invalid password is provided', async () => {
+    fakeUsersService.find = () =>
+      Promise.resolve([{ email: 'abc@mail.com', password: '123123' } as Users]);
+
+    try {
+      await service.signin('abc@mail.com', 'wrongpassword');
+    } catch (error) {
+      expect(error).toBeDefined();
+      expect(error.message).toEqual('Wrong password!');
+    }
+  });
+
+  it('returns a user if correct password is provided', async () => {
+    fakeUsersService.find = () =>
+      Promise.resolve([
+        {
+          email: 'abc@mail.com',
+          password:
+            '6216a2d890e4b16c.635c2b17707cf9b56abfd4b435686f38ac77e66383664cd0aebba9767926b00d',
+        } as Users,
+      ]);
+
+    const user = await service.signin('abc@mail.com', '123123');
+
+    expect(user).toBeDefined();
+  });
 });
